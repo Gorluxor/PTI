@@ -38,6 +38,7 @@ def project(
         image_log_step=global_config.image_rec_result_log_snapshot,
         w_name: str
 ):
+    print(f"{target.shape} == {(G.img_channels, G.img_resolution, G.img_resolution)}")
     assert target.shape == (G.img_channels, G.img_resolution, G.img_resolution)
 
     def logprint(*args):
@@ -123,7 +124,7 @@ def project(
             with torch.no_grad():
                 if use_wandb:
                     global_config.training_step += 1
-                    wandb.log({f'first projection _{w_name}': loss.detach().cpu()}, step=global_config.training_step)
+                    wandb.log({f'first projection _{w_name}': loss.detach().cpu(), "lstep":global_config.local_step, "batch": global_config.img_index}, step=global_config.training_step)
                     log_utils.log_image_from_w(w_opt.repeat([1, G.mapping.num_ws, 1]), G, w_name)
 
         # Step

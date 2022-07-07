@@ -6,10 +6,10 @@ from tqdm import tqdm
 from utils.alignment import align_face
 
 
-def pre_process_images(raw_images_path):
+def pre_process_images(raw_images_path, IMAGE_SIZE = 1024):
     current_directory = os.getcwd()
 
-    IMAGE_SIZE = 1024
+    #IMAGE_SIZE = 1024
     predictor = dlib.shape_predictor(paths_config.dlib)
     os.chdir(raw_images_path)
     images_names = glob.glob(f'*')
@@ -26,7 +26,8 @@ def pre_process_images(raw_images_path):
     os.makedirs(paths_config.input_data_path, exist_ok=True)
     for image, name in zip(aligned_images, images_names):
         real_name = name.split('.')[0]
-        image.save(f'{paths_config.input_data_path}/{real_name}.jpeg')
+        #image.save(f'{paths_config.input_data_path}/{real_name}.jpeg')#, format='JPEG', subsampling=0, quality=100)
+        image.save(f'{paths_config.input_data_path}/{real_name}.png')
 
     os.chdir(current_directory)
 

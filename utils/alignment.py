@@ -106,8 +106,14 @@ def align_face(filepath, predictor, output_size):
         quad += pad[:2]
 
     # Transform.
-    img = img.transform((transform_size, transform_size), PIL.Image.QUAD, (quad + 0.5).flatten(), PIL.Image.BILINEAR)
+    from configs import global_config
+    if not global_config.lanczos:
+        img = img.transform((transform_size, transform_size), PIL.Image.QUAD, (quad + 0.5).flatten(), PIL.Image.BILINEAR)
+    else:
+        img = img.transform((transform_size, transform_size), PIL.Image.QUAD, (quad + 0.5).flatten(), PIL.Image.BICUBIC)
+        #img = img.resize((transform_size, transform_size), PIL.Image.LANCZOS)
     if output_size < transform_size:
+        print("Antialiasing being used...")
         img = img.resize((output_size, output_size), PIL.Image.ANTIALIAS)
 
     # Return aligned image.

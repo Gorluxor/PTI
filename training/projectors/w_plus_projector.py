@@ -122,11 +122,12 @@ def project(
                 noise = F.avg_pool2d(noise, kernel_size=2)
         loss = dist + reg_loss * regularize_noise_weight
 
-        if step % image_log_step == 0:
+        #if step % image_log_step == 0:
+        if step % (num_steps-1): # just add in the end
             with torch.no_grad():
                 if use_wandb:
                     global_config.training_step += 1
-                    wandb.log({f'first projection _{w_name}': loss.detach().cpu()}, step=global_config.training_step)
+                    wandb.log({f'first projection {w_name}': loss.detach().cpu(), "lstep":global_config.local_step, "batch": global_config.img_index}, step=step) #global_config.training_step
                     log_image_from_w(w_opt, G, w_name)
 
         # Step

@@ -40,15 +40,15 @@ class Space_Regulizer:
             if hyperparameters.regulizer_l2_lambda > 0:
                 l2_loss_val = l2_loss.l2_loss(old_img, new_img)
                 if use_wandb:
-                    wandb.log({f'space_regulizer_l2_loss_val': l2_loss_val.detach().cpu()},
-                              step=global_config.training_step)
+                    wandb.log({f'space_regulizer_l2_loss_val': l2_loss_val.detach().cpu(), "lstep":global_config.local_step},
+                                step=global_config.training_step)
                 loss += l2_loss_val * hyperparameters.regulizer_l2_lambda
 
             if hyperparameters.regulizer_lpips_lambda > 0:
                 loss_lpips = self.lpips_loss(old_img, new_img)
                 loss_lpips = torch.mean(torch.squeeze(loss_lpips))
                 if use_wandb:
-                    wandb.log({f'space_regulizer_lpips_loss_val': loss_lpips.detach().cpu()},
+                    wandb.log({f'space_regulizer_lpips_loss_val': loss_lpips.detach().cpu(), "lstep":global_config.local_step},
                               step=global_config.training_step)
                 loss += loss_lpips * hyperparameters.regulizer_lpips_lambda
 
