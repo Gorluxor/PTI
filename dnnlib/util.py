@@ -480,7 +480,7 @@ def get_local_snapshot_network(network_id:int, network_name:str = "G_ema",  loca
                                requires_grad:bool = False) -> torch.nn.Module:
     import pickle, os, sys
     full_path = os.path.join(local_path, f'network-snapshot-{str(network_id).zfill(6)}.pkl')
-    sys.path.insert(0, os.path.join(".","content","stylegan2-ada-pytorch"))
+    #sys.path.insert(0, os.path.join(".","content","stylegan2-ada-pytorch"))
     with open(full_path, 'rb') as f:
         v = pickle.load(f) #['D_ema'].requires_grad_(False).to(device) # type: ignore
         print(list(v.keys()))
