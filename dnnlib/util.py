@@ -475,3 +475,19 @@ def open_url(url: str, cache_dir: str = None, num_attempts: int = 10, verbose: b
     # Return data as file object.
     assert not return_filename
     return io.BytesIO(url_data)
+import torch
+def get_local_snapshot_network(network_id:int, network_name:str = "G_ema",  local_path:str = "",
+                               requires_grad:bool = False) -> torch.nn.Module:
+    import pickle, os, sys
+    full_path = os.path.join(local_path, f'network-snapshot-{str(network_id).zfill(6)}.pkl')
+    sys.path.insert(0, os.path.join(".","content","stylegan2-ada-pytorch"))
+    with open(full_path, 'rb') as f:
+        v = pickle.load(f) #['D_ema'].requires_grad_(False).to(device) # type: ignore
+        print(list(v.keys()))
+        pick = v[network_name].cuda().requires_grad_(requires_grad)  # torch.nn.Module
+    #print(list(pick.keys()))
+    # z = torch.randn([1, G.z_dim]).cuda()    # latent codes
+    # c = None                                # class labels (not used in this example)
+    # img = G(z, c)                           # NCHW, float32, dynamic range [-1, +1]
+    #return pick[network_name].cuda()
+    return pick
